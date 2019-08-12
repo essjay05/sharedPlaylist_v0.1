@@ -13,16 +13,21 @@ const
 require('./db/mongoose');
 
 // Middleware
+app.use(express.json());
+
 
 // Routes
-// Home route
-app.get('/', ( req, res ) => {
-    res.json({ success: true })
-})
-// API Root route
-app.get('/api', ( req, res ) => {
-    res.json({ message: `API Root Route`})
-})
+    // Home route
+    app.get('/', ( req, res ) => {
+        res.json({ success: true })
+    })
+    // API Root route
+    app.get('/api', ( req, res ) => {
+        res.json({ message: `API Root Route`})
+    })
+    // Users Router
+    const usersRouter = require('./routes/usersRouter.js');
+    app.use('/users', usersRouter);
 
 // Listening PORT
 app.listen(PORT, err => {
