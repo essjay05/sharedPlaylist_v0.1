@@ -2,7 +2,7 @@
 const
     express = require('express'),
     usersRouter = new express.Router(),
-    // usersCtrl = ('../controllers/users'),
+    usersCtrl = require('../controllers/users'),
     User = require('../models/User');
 
 // Render Login View
@@ -14,25 +14,7 @@ const
 // Render Sign up View
 
 // Authenticate Sign up / CREATE User:
-usersRouter.post('/signup', async ( req, res ) => {
-    console.log(req.body);
-
-    let user = new User ({ 
-        email: req.body.email,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        username: req.body.username,
-        password: req.body.password
-    });
-
-    try {
-        const savedUser = await user.save();
-        res.status(200).send(savedUser);
-    } catch (err) {
-        res.status(404).send(err);
-        console.log(err);
-    }
-})
+usersRouter.post('/signup', usersCtrl.create);
 
 // Show profile (MUST BE LOGGED IN [Read 1]):
 // usersRouter.post('/login', async ( req, res ) => {
@@ -45,7 +27,7 @@ usersRouter.post('/signup', async ( req, res ) => {
         
 //         res.status(200).Headers('x-auth', createdToken).send(user);
 //     } catch(error) {
-//         res.status(400).RTCDtmfSender({ errorMsg: error });
+//         res.status(400).send({ errorMsg: error });
 //         console.log(error);
 //     }
 // })
@@ -53,10 +35,29 @@ usersRouter.post('/signup', async ( req, res ) => {
 // Show all profiles (Must be logged in [INDEX All Users]):
 usersRouter.get('/', async ( req, res ) => {
     console.log(`Finding ALL users in database.`);
-    const users = await User.find({});
-    res.status(200).send(users);
-    console.log(`Here's the full list of #${users.length} users: ${users}`);
+    try {
+        const users = await User.find({});
+        res.status(200).send(users);
+        console.log(`Here's the total list of ${users.length} many users: ${users}`);
+    } catch(err) {
+        res.status(400).send({ errorMsg: error });
+        console.log(error);
+    }
 });
+
+// Show 1 profile (Must be logged in):
+usersRouter.get('/:id', async ( req, res ) => {
+    console.log(`Finding userID: ${req.params.id}`)
+
+    try {
+        const foundUser = await User.find({ _id: req.params.id });
+        res.status(200).send(foundUser);
+        console.log(`Found user: ${foundUser}`)
+    } catch(err) {
+        res.status(400).send({ errorMsg: error });
+    }
+
+})
 // Render form to Edit profile
 
 // Update profile [UPDATE User]:
