@@ -48,7 +48,6 @@ usersRouter.patch('/:id/edit', usersCtrl.update);
 // Delete User Profile [DESTROY USER]
 usersRouter.delete('/:id/edit', usersCtrl.destroy);
 
-
 // Middleware to authenticate logged in:
 
 // Make exportable
