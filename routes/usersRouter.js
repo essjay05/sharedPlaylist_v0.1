@@ -1,8 +1,8 @@
-
 // Require express and Routers
 const
     express = require('express'),
     usersRouter = new express.Router(),
+    // usersCtrl = ('../controllers/users'),
     User = require('../models/User');
 
 // Render Login View
@@ -83,9 +83,31 @@ usersRouter.patch('/:id/edit', async ( req, res ) => {
 // Log Out
 
 // Delete User Profile [DESTROY USER]
+usersRouter.delete('/:id/edit', async ( req, res ) => {
+    console.log(`Finding user id# ${req.params.id} to delete`);
+    await User.findOneAndDelete({ _id: req.params.id });
+    res.status(200).send(`Successfully deleted userID #${req.params.id}`)
+});
 
 
 // Middleware to authenticate logged in:
 
 // Make exportable
 module.exports = usersRouter;
+
+// const
+//     express = require('express'),
+//     usersRouter = new express.Router(),
+//     usersCtrl = require('../controllers/users.js'),
+//     verifyToken = require('../serverAuth').verifyToken;
+
+// usersRouter.get('/', usersCtrl.index);
+// usersRouter.post('/', usersCtrl.create);
+// usersRouter.post('/authenticate', usersCtrl.authenticate);
+
+// usersRouter.use(verifyToken);
+// usersRouter.get('/:id', usersCtrl.show);
+// usersRouter.patch('/:id', usersCtrl.update);
+// usersRouter.delete('/:id', usersCtrl.destroy);
+
+// module.exports = usersRouter;
