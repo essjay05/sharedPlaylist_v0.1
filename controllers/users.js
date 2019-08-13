@@ -23,10 +23,18 @@ module.exports = {
             res.status(404).send(err);
             console.log(err);
         }
+    },
+    index: async ( req, res ) => {
+        console.log(`Finding ALL users in database.`);
+        try {
+            const users = await User.find({});
+            res.status(200).send(users);
+            console.log(`Here's the total list of ${users.length} many users: ${users}`);
+        } catch(err) {
+            res.status(400).send({ errorMsg: error });
+            console.log(error);
+        }
     }
-    // index: {
-
-    // },
     // show: {
 
     // },
