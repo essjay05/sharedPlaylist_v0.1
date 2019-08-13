@@ -85,8 +85,14 @@ usersRouter.patch('/:id/edit', async ( req, res ) => {
 // Delete User Profile [DESTROY USER]
 usersRouter.delete('/:id/edit', async ( req, res ) => {
     console.log(`Finding user id# ${req.params.id} to delete`);
-    await User.findOneAndDelete({ _id: req.params.id });
-    res.status(200).send(`Successfully deleted userID #${req.params.id}`)
+    try {
+        const foundUser = await User.findOneAndDelete({ _id: req.params.id });
+        const deletedUser = await foundUser.save();
+        res.status(200).send(`Successfully deleted: ${deletedUser}`);
+    } catch (err) {
+        res.status(400).send(err);
+        console.log(err);
+    }   
 });
 
 
