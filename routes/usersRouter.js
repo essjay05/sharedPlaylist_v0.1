@@ -36,40 +36,12 @@ usersRouter.post('/signup', usersCtrl.create);
 usersRouter.get('/', usersCtrl.index);
 
 // Show 1 profile (Must be logged in):
-usersRouter.get('/:id', async ( req, res ) => {
-    console.log(`Finding userID: ${req.params.id}`)
+usersRouter.get('/:id', usersCtrl.show);
 
-    try {
-        const foundUser = await User.find({ _id: req.params.id });
-        res.status(200).send(foundUser);
-        console.log(`Found user: ${foundUser}`)
-    } catch(err) {
-        res.status(400).send({ errorMsg: error });
-    }
-
-})
 // Render form to Edit profile
 
 // Update profile [UPDATE User]:
-usersRouter.patch('/:id/edit', async ( req, res ) => {
-    console.log(`User to be updated: ${req.params.id}`)
-
-    try {
-        const foundUser = await User.findOneAndUpdate({_id: req.params.id}, 
-            {
-                email: req.body.email,
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                username: req.body.username,
-                password: req.body.password
-            });
-        const updatedUser = await foundUser.save();
-        res.status(200).send(`Successfully updated: ${foundUser} to ${updatedUser}`);
-    } catch (err) {
-        res.status(400).send(err);
-        console.log(err);
-    } 
-});
+usersRouter.patch('/:id/edit', usersCtrl.update);
 
 // Log Out
 
