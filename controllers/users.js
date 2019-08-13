@@ -66,8 +66,16 @@ module.exports = {
             res.status(400).send(err);
             console.log(err);
         } 
+    },
+    destroy: async ( req, res ) => {
+        console.log(`Finding user id# ${req.params.id} to delete`);
+        try {
+            const foundUser = await User.findOneAndDelete({ _id: req.params.id });
+            const deletedUser = await foundUser.save();
+            res.status(200).send(`Successfully deleted: ${deletedUser}`);
+        } catch (err) {
+            res.status(400).send(err);
+            console.log(err);
+        }   
     }
-    // destroy: {
-
-    // }
 }
