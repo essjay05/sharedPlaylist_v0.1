@@ -47,25 +47,31 @@ module.exports = {
         }
     
     },
-    update: async ( req, res ) => {
+    update: ( req, res ) => {
         console.log(`User to be updated: ${req.params.id}`)
     
-        try {
-            const user = await User.findOneAndUpdate({_id: req.params.id}, 
-                {
-                    email: req.body.email,
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    username: req.body.username,
-                    password: req.body.password
-                });
-            const updatedUser = await user.save();
-            res.status(200).send(`Successfully updated: ${foundUser} to ${updatedUser}`);
-            console.log(`Successfully updated ${updatedUser}`)
-        } catch (err) {
-            res.status(400).send(err);
-            console.log(err);
-        } 
+        User.findById(req.params.id, ( err, updatedUser) => {
+            if (!req.body.password) delete req.body.password
+            Object.assign( updatedUser, req.body )
+            updatedUser.save(( err, updatedUser ) => {
+                if (err) res.json({ message: "ERROR", payload: null, code: err.code })
+                res.json({ message: "Successfully updated the user!", payload: updatedUser})
+            })
+        })
+        //         {
+        //             email: req.body.email,
+        //             firstName: req.body.firstName,
+        //             lastName: req.body.lastName,
+        //             username: req.body.username,
+        //             password: req.body.password
+        //         });
+        //     const updatedUser = await user.save();
+        //     res.status(200).send(`Successfully updated: ${foundUser} to ${updatedUser}`);
+        //     console.log(`Successfully updated ${updatedUser}`)
+        // } catch (err) {
+        //     res.status(400).send(err);
+        //     console.log(err);
+        // } 
     },
     destroy: async ( req, res ) => {
         console.log(`Finding user id# ${req.params.id} to delete`);
