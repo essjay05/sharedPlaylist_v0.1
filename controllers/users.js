@@ -51,7 +51,7 @@ module.exports = {
         console.log(`User to be updated: ${req.params.id}`)
     
         try {
-            const foundUser = await User.findOneAndUpdate({_id: req.params.id}, 
+            const user = await User.findOneAndUpdate({_id: req.params.id}, 
                 {
                     email: req.body.email,
                     firstName: req.body.firstName,
@@ -59,7 +59,7 @@ module.exports = {
                     username: req.body.username,
                     password: req.body.password
                 });
-            const updatedUser = await foundUser.save();
+            const updatedUser = await user.save();
             res.status(200).send(`Successfully updated: ${foundUser} to ${updatedUser}`);
             console.log(`Successfully updated ${updatedUser}`)
         } catch (err) {
