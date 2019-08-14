@@ -50,7 +50,7 @@ const UserSchema = new mongoose.Schema({
         console.log(`signToken user is: ${user}`)
         let access = 'auth';
 
-        let token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET, { expiresIn: '30s' }).toString();
+        let token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET, { expiresIn: '7 days' }).toString();
         console.log(`token created from jwt.sign is: ${token}`)
         // Adding access and token variables to our user.tokens array
         user.tokens = user.tokens.concat([{ access, token }]);
