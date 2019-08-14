@@ -3,6 +3,7 @@ const
     express = require('express'),
     usersRouter = new express.Router(),
     usersCtrl = require('../controllers/users'),
+    authenticate = require('../middleware/authenticate'),
     User = require('../models/User');
 
 // User CRUD functions:
@@ -25,7 +26,7 @@ const
         try {
             const user = await User.findByCredentials( req.body.email, req.body.password );
                 console.log(`Login... this is my found user: ${user}`);
-            const createdToken = await user.generateAuthToken();
+            const createdToken = await user.signToken();
                 console.log(`${user.email} is successfully logged in and given an auth token`)
             
             res.status(200).header('x-auth', createdToken).send(user);
@@ -52,7 +53,7 @@ const
 //     try {
 //         const user = await user.findByCredentials(req.body.email, req.body.password);
 //             console.log(`This is my found user: ${user}`);
-//         const createdToken = await user.generateAuthToken();
+//         const createdToken = await user.signToken();
         
 //         res.status(200).Headers('x-auth', createdToken).send(user);
 //     } catch(error) {
@@ -65,7 +66,8 @@ const
 
 
 
-// Middleware to authenticate logged in:
+
+
 
 // Make exportable
 module.exports = usersRouter;

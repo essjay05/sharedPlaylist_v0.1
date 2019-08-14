@@ -58,6 +58,7 @@ module.exports = {
                 res.json({ message: "Successfully updated the user!", payload: updatedUser})
             })
         })
+    },
         //         {
         //             email: req.body.email,
         //             firstName: req.body.firstName,
@@ -72,7 +73,7 @@ module.exports = {
         //     res.status(400).send(err);
         //     console.log(err);
         // } 
-    },
+    
     destroy: async ( req, res ) => {
         console.log(`Finding user id# ${req.params.id} to delete`);
         try {

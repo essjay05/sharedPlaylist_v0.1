@@ -45,22 +45,24 @@ const UserSchema = new mongoose.Schema({
 
 // Custom Methods/Statics
     // Generate Auth Token
-    UserSchema.methods.generateAuthToken = async function() {
+    UserSchema.methods.signToken = async function() {
         let user = this;
+        console.log(`signToken user is: ${user}`)
         let access = 'auth';
 
-        let token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString();
-
+        let token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET, { expiresIn: '30s' }).toString();
+        console.log(`token created from jwt.sign is: ${token}`)
         // Adding access and token variables to our user.tokens array
         user.tokens = user.tokens.concat([{ access, token }]);
 
         // Await result of user.save function
         const savedToken = await user.save();
+        console.log(`savedToken after creation is: ${savedToken}`)
         return token;
     };
 
     // FindByToken method
-    UserSchema.statics.findByToken = async function(token) {
+    UserSchema.statics.verifyToken = async function(token) {
         let User = this;
         var decoded;
 
@@ -73,7 +75,7 @@ const UserSchema = new mongoose.Schema({
 
         try {
             const foundUser = await User.findOne({ 
-                '_id': decoded.__dirname,
+                '_id': decoded._id,
                 'tokens.token': token,
                 'tokens.access': 'auth'
             });
